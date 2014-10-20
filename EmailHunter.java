@@ -6,7 +6,8 @@ import java.util.Scanner;
 //Ben Greenawald and Ben Canty
 //Computing ID: bhg5yd
 //CAN YOU SEE THIS EDIT?
-//
+//Can you see this edit?
+
 public class EmailHunter {
 
 	public static void main(String[] args) throws Exception {
