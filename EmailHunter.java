@@ -31,7 +31,7 @@ public class EmailHunter {
 		}
 		for(int i = 0; i < s.size(); i++){ //THIS IS BUGGY AND DOES NOT WORK YET
 			while(s.get(i).contains("href=")){
-				int c = s.get(i).charAt('@');
+				int c = s.get(i).indexOf('@');
 				int start = s.get(i).lastIndexOf('"', c);
 				int end = s.get(i).indexOf('"',c);
 				String temp = s.get(i).substring(start + 1, end);
@@ -88,7 +88,7 @@ public class EmailHunter {
 		//Removes invalid addresses that contain @ but are not emails addresses
 		for(int i = 0; i < emails.size(); i++){
 			System.out.println(emails.get(i));
-			int c = emails.get(i).charAt('@');
+			int c = emails.get(i).indexOf('@');
 			int size = emails.get(i).length();
 			String end = emails.get(i).substring(c, size);
 			
