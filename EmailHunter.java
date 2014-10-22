@@ -5,17 +5,54 @@ import java.util.Scanner;
 
 //Ben Greenawald and Ben Canty
 //Computing ID: bhg5yd
-//This code is a little buggy, even with the basic emails. Just look at the output and see if you can figure it out
+//
 public class EmailHunter {
+	
+	public static ArrayList<String> removehyperlink(ArrayList<String> s){
+		//First draft of code to remove hyperlinks
+		
+		for(int i = 0; i < s.size(); i++){
+			while(s.get(i).contains("<br>")){
+				String temp = s.get(i);
+				s.remove(i);
+				temp = temp.replace("<br>", "");
+				s.add(temp);
+				
+			}
+		}
+		for(int i = 0; i < s.size(); i++){
+			while(s.get(i).contains("</a>")){
+				String temp = s.get(i);
+				s.remove(i);
+				temp = temp.replace("</a>", "");
+				s.add(temp);
+				
+			}
+		}
+		for(int i = 0; i < s.size(); i++){ //THIS IS BUGGY AND DOES NOT WORK YET
+			while(s.get(i).contains("href=")){
+				int c = s.get(i).charAt('@');
+				int start = s.get(i).lastIndexOf('"', c);
+				int end = s.get(i).indexOf('"',c);
+				String temp = s.get(i).substring(start + 1, end);
+				s.remove(i);
+				while(!(s.contains(temp)))
+					s.add(temp);
+			
+			}
+		}	
+		
+		return s;
+	}
 
 	public static void main(String[] args) throws Exception {
 		Scanner scan = new Scanner(System.in);
-		//System.out.println("Is working");
+		
 		//File file = new File("email_hunt.txt");
 		//Scanner scan1 = new Scanner(file);
 		
 		//Gets URL from the user
-		System.out.println("Please enter a URL");
+		System.out.print("Please enter a URL: ");
 		String url1 = scan.nextLine();
 		URL url = new URL(url1);
 		Scanner scan1 = new Scanner(url.openStream());
@@ -45,6 +82,20 @@ public class EmailHunter {
 			}
 		}
 		
+		//Remove hyperlinks
+		emails = EmailHunter.removehyperlink(emails);
+		
+		//Removes invalid addresses that contain @ but are not emails addresses
+		for(int i = 0; i < emails.size(); i++){
+			System.out.println(emails.get(i));
+			int c = emails.get(i).charAt('@');
+			int size = emails.get(i).length();
+			String end = emails.get(i).substring(c, size);
+			
+			if(end.length() < 2){
+				emails.remove(i);
+			}
+		}
 		for(int i = 0; i < emails.size(); i++){
 			System.out.println("Found: " + emails.get(i));
 		}
