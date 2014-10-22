@@ -5,22 +5,20 @@ import java.util.Scanner;
 
 //Ben Greenawald and Ben Canty
 //Computing ID: bhg5yd
-//CAN YOU SEE THIS EDIT?
-//Can you see this edit?
-
+//
 public class EmailHunter {
 
 	public static void main(String[] args) throws Exception {
-		//Scanner scan = new Scanner(System.in);
-		System.out.println("Is working");
-		File file = new File("email_hunt.txt");
-		Scanner scan1 = new Scanner(file);
+		Scanner scan = new Scanner(System.in);
+		//System.out.println("Is working");
+		//File file = new File("email_hunt.txt");
+		//Scanner scan1 = new Scanner(file);
 		
 		//Gets URL from the user
-		//System.out.println("Please enter a URL");
-		//String url1 = scan.nextLine();
-		//URL url = new URL(url1);
-		//Scanner scan1 = new Scanner(url.openStream());
+		System.out.println("Please enter a URL");
+		String url1 = scan.nextLine();
+		URL url = new URL(url1);
+		Scanner scan1 = new Scanner(url.openStream());
 		
 		ArrayList<String> emails = new ArrayList<String>();
 		
@@ -31,16 +29,21 @@ public class EmailHunter {
 			whole += scan1.nextLine() + "\n";
 		}
 		
-		//Returns the emails that are in the most standard form e.g hello@virginia.edu
-		while(whole.contains("@")){
-
-			int j = whole.lastIndexOf(' ');
-			int k = whole.indexOf(' ');
-			
-			emails.add(whole.substring(j + 1, k));
+		//More robust method for getting emails in the standard form
+		for(int i = 0; i < whole.length(); i++){
+			if(whole.charAt(i) == '@'){
+				int start = whole.lastIndexOf(' ', i);
+				int finish = whole.indexOf(' ', i);
+				if(whole.charAt(finish - 1) == '.'){
+					while(!(emails.contains(whole.substring(start, finish - 1))))	//Removes the period if it is puntuation
+					emails.add(whole.substring(start, finish - 1));
+					}
+				else{
+					while(!(emails.contains(whole.substring(start, finish))))		//Leaves it otherwise
+						emails.add(whole.substring(start, finish));
+				}
+			}
 		}
-
 		System.out.println(emails.toString());
-	}
 
-}
+}}
