@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 //Ben Greenawald and Ben Canty
 //Computing ID: bhg5yd
-//
+//This code is a little buggy, even with the basic emails. Just look at the output and see if you can figure it out
 public class EmailHunter {
 
 	public static void main(String[] args) throws Exception {
@@ -44,6 +44,9 @@ public class EmailHunter {
 				}
 			}
 		}
-		System.out.println(emails.toString());
+		
+		for(int i = 0; i < emails.size(); i++){
+			System.out.println("Found: " + emails.get(i));
+		}
 
 }}
