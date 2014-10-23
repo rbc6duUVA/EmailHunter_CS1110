@@ -126,6 +126,25 @@ public class EmailFinder {				//We should refactor the Class name to EmailFinder
 			}
 			
 		}
+		//Removes cases with not a valid .whatever
+		for(int i = 0; i < emails.size(); i++){
+			
+			int c = emails.get(i).indexOf('@');
+			int size = emails.get(i).length();
+			String end = emails.get(i).substring(c + 1, size);
+			String end2 = "";
+			int c2 = end.indexOf('.');
+			
+			if(c2 == -1){
+				emails.remove(i);
+				i--;
+			}else
+				end2 = end.substring(c2 + 1, end.length());
+				if(end2.length() == 1){
+					emails.remove(i);
+					i--;
+				}
+		}
 		
 		
 		for(int i = 0; i < emails.size(); i++){
