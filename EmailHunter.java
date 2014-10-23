@@ -50,8 +50,9 @@ public class EmailFinder {				//We should refactor the Class name to EmailFinder
 		}}}
 		
 		for(int i=0; i<temp.size(); i++) {
-			if(temp.get(i).equals(" ")) temp.remove(i);
-			if(temp.get(i).equals(".")) temp.remove(i);
+			if(temp.get(i).equals(" ")) 		temp.remove(i);
+			if(temp.get(i).equals(".")) 		temp.remove(i);
+			if(!(temp.get(i).contains("."))) 	temp.remove(i);
 		}
 			
 		return temp;
