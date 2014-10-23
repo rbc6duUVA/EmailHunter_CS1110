@@ -17,73 +17,44 @@ public class EmailFinder {				//We should refactor the Class name to EmailFinder
 			str += temp + " ";
 		}
 		
-			//CLEAN THE STRING 			".*(jim|joe).*"
-			while(str.contains("<html>")) 		str.replace(Pattern.quote("<html>"),"");
-			while(str.contains("<head>")) 		str.replace(Pattern.quote("<head>"),"");
-			while(str.contains("<title>")) 		str.replace(Pattern.quote("<title>"),"");
-			while(str.contains("<strong>")) 	str.replace(Pattern.quote("<strong>"),"");
-			while(str.contains("<br>")) 		str.replace(Pattern.quote("<br>)"),"");
-			while(str.contains("<a")) 			str.replace(Pattern.quote("<a)"),"");
-			while(str.contains("\">")) 			str.replace(Pattern.quote("\">"),"");
-			while(str.contains("</html>")) 		str.replace(Pattern.quote("</html>"),"");
-			while(str.contains("</head>")) 		str.replace(Pattern.quote("</head>"),"");
-			while(str.contains("</title>")) 	str.replace(Pattern.quote("</title>"),"");
-			while(str.contains("</strong>")) 	str.replace(Pattern.quote("</strong>"),"");
-			while(str.contains("</a>")) 		str.replace(Pattern.quote("</a>"),"");
-			while(str.contains("href=\"")) 		str.replace(Pattern.quote("href=\""),"");
-
+			//CLEAN THE STRING
+			while(str.contains("</a>")) 		str = str.replaceAll("</a>"		," ");
+			while(str.contains("<html>")) 		str = str.replaceAll("<html>"		," ");
+			while(str.contains("<head>")) 		str = str.replaceAll("<head>"		," ");
+			while(str.contains("<title>")) 		str = str.replaceAll("<title>"		," ");
+			while(str.contains("<strong>")) 	str = str.replaceAll("<strong>"		," ");
+			while(str.contains("<br>")) 		str = str.replaceAll("<br>"		," ");
+			while(str.contains("</html>")) 		str = str.replaceAll("</html>"		," ");
+			while(str.contains("</head>")) 		str = str.replaceAll("</head>"		," ");
+			while(str.contains("</title>")) 	str = str.replaceAll("</title>"		," ");
+			while(str.contains("</strong>")) 	str = str.replaceAll("</strong>"	," ");
+			while(str.contains("<a")) 		str = str.replaceAll("<a)"		," ");
+			while(str.contains("\">")) 		str = str.replaceAll("\">"		," ");
+			while(str.contains("href=")) 		str = str.replaceAll("href="		," ");
+			while(str.contains("\"")) 		str = str.replaceAll("\""		," ");
+			while(str.contains("NOSPAM")) 		str = str.replaceAll("NOSPAM"		,"");
 			
 		System.out.println("After Clean: " + str);
 			
 		ArrayList<String> temp = new ArrayList<String>();		//Takes every element of the new String (which was the original ArrayList concatenated with 
-		String[] elements = str.trim().split(" ");				//spaces between each element.  Thus this makes a String array and ArrayList out of the String
-																	//"temp" will now be the Original ArrayList, but without HTML formatting symbols.
+		String[] elements = str.trim().split(" ");			//spaces between each element.  Thus this makes a String array and ArrayList out of the String
+										//"temp" will now be the Original ArrayList, but without HTML formatting symbols.
 			
 		for(int i=0; i<elements.length; i++) {
 			temp.add(elements[i]);
 		}
 			
-		System.out.println("DONE: removing Hyperlinks!");
-		System.out.println("POST: " + temp);
+		for(int i=0; i<temp.size(); i++) { for(int j = i+1; j<temp.size(); j++) { if(temp.get(i).equals(temp.get(j))) { 
+			temp.remove(j);
+			j--;
+		}}}
+		
+		for(int i=0; i<temp.size(); i++) {
+			if(temp.get(i).equals(" ")) temp.remove(i);
+			if(temp.get(i).equals(".")) temp.remove(i);
+		}
 			
 		return temp;
-		/*
-		for(int i = 0; i < s.size(); i++){			//So this removes the "<br>" component of a hyperlink?
-			while(s.get(i).contains("<br>")){
-				s.remove("<br>");
-				//String temp = s.get(i);
-				//s.remove(i);
-				//temp = temp.replace("<br>", "");
-				//s.add(temp);
-			}
-		}
-		for(int i = 0; i < s.size(); i++){
-			while(s.get(i).contains("</a>")){
-				s.remove("</a>");
-				//String temp = s.get(i);
-				//s.remove(i);
-				//temp = temp.replace("</a>", "");
-				//s.add(temp);
-				
-			}
-		}
-		for(int i = 0; i < s.size(); i++){ //THIS IS BUGGY AND DOES NOT WORK YET
-			while(s.get(i).contains("href=")){
-				s.remove("href=");
-				
-				//int c = s.get(i).indexOf('@');
-				//int start = s.get(i).lastIndexOf('"', c);
-				//int end = s.get(i).indexOf('"',c);
-				//String temp = s.get(i).substring(start + 1, end);
-				//s.remove(i);
-				//while(!(s.contains(temp)))
-				//	s.add(temp);
-			
-			}
-		}
-		
-		return s;
-		*/
 	}
 
 	public static void main(String[] args) throws Exception {
