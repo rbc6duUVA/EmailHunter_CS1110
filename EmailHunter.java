@@ -41,6 +41,13 @@ public class EmailFinder {
 		whole = cleanFor( whole,  " dot ",  ".");
 		whole = cleanFor( whole,  " at ",  "@");
 		
+		whole = cleanFor( whole,  ". edu",  ".edu");
+		whole = cleanFor( whole,  ". com",  ".com");
+		whole = cleanFor( whole,  ". net",  ".net");
+		whole = cleanFor( whole,  ". Edu",  ".edu");
+		whole = cleanFor( whole,  ". Com",  ".com");
+		whole = cleanFor( whole,  ". Net",  ".net");
+		
 		//More robust method for getting emails in the standard form
 		for(int i = 0; i < whole.length(); i++){
 			if(whole.charAt(i) == '@')
