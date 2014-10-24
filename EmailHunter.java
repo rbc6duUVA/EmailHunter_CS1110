@@ -38,8 +38,8 @@ public class EmailFinder {
 		whole = cleanFor( whole,  "(dot)",  ".");
 		whole = cleanFor( whole,  "(at)",  "@");
 		whole = cleanFor( whole,  " .",  ".");
-		whole = cleanFor( whole,  ". ",  "@");
-		whole = cleanFor( whole,  " @",  ".");
+		whole = cleanFor( whole,  ". ",  ".");
+		whole = cleanFor( whole,  " @",  "@");
 		whole = cleanFor( whole,  "@ ",  "@");
 		
 		whole = cleanFor( whole,  " dot ",  ".");
