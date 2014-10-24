@@ -143,6 +143,22 @@ public class EmailFinder {
 				i--;
 			}
 		}
+		//Remove cases with the underscore in the ending THIS DOES NOT WORK PERFECTLY YET
+		for(int k = 0; k < emails.size(); k++){
+			int index = emails.get(k).indexOf('@');
+			String temp = emails.get(k).substring(index + 1, emails.get(k).length());
+			temp = cleanFor(temp, ".", "");
+			
+			for(int q = 0; q < temp.length(); q++){
+				if(temp.charAt(q) < 65 || (temp.charAt(q) > 90 && temp.charAt(q) < 97) || temp.charAt(q) > 123){
+					emails.remove(k);
+					k--;
+					continue;
+			
+				}
+			}
+			
+		}
 
 		for(int i = 0; i < emails.size(); i++) { System.out.println("Found: <" + emails.get(i) + ">"); }
 
