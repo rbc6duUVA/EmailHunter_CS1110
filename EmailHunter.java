@@ -199,6 +199,22 @@ public class EmailFinder {
 		if(dmgString.equalsIgnoreCase("gmail._om")) repl = "c";
 		if(dmgString.equalsIgnoreCase("gmail.c_m")) repl = "o";
 		
+		if(dmgString.equalsIgnoreCase("_ahoo.com")) repl = "y";
+		if(dmgString.equalsIgnoreCase("y_hoo.com")) repl = "a";
+		if(dmgString.equalsIgnoreCase("ya_oo.com")) repl = "h";
+		if(dmgString.equalsIgnoreCase("yah__.c_m")) repl = "o";
+		if(dmgString.equalsIgnoreCase("yahoo._om")) repl = "c";
+		if(dmgString.equalsIgnoreCase("yahoo.co_")) repl = "m";
+		
+		if(dmgString.equalsIgnoreCase("_om_ast.net")) repl = "c";
+		if(dmgString.equalsIgnoreCase("c_mcast.net")) repl = "o";
+		if(dmgString.equalsIgnoreCase("co_cast.net")) repl = "m";
+		if(dmgString.equalsIgnoreCase("comc_st.net")) repl = "a";
+		if(dmgString.equalsIgnoreCase("comca_t.net")) repl = "s";
+		if(dmgString.equalsIgnoreCase("comcas_.ne_")) repl = "t";
+		if(dmgString.equalsIgnoreCase("comcast._et")) repl = "n";
+		if(dmgString.equalsIgnoreCase("comcast.n_t")) repl = "e";
+		
 		//Low Fidelity
 		//Run after END is refined
 		if(dmgString.equalsIgnoreCase("_du")) repl = "e";
