@@ -144,7 +144,7 @@ public class EmailFinder {
 			}
 		}
 
-		for(int i = 0; i < emails.size(); i++) { System.out.println("Found: " + emails.get(i)); }
+		for(int i = 0; i < emails.size(); i++) { System.out.println("Found: <" + emails.get(i) + ">"); }
 
 }
 	
