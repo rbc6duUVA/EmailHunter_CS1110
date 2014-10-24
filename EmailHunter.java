@@ -14,7 +14,7 @@ public class EmailFinder {
 		Scanner scan = new Scanner(System.in);
 		
 		//Gets URL from the user
-		System.out.print("Please enter a URL: ");
+		System.out.print("What web page should we search for email addresses? ");
 		String url1 = scan.nextLine();
 		URL url = new URL(url1);
 		Scanner scan1 = new Scanner(url.openStream());
