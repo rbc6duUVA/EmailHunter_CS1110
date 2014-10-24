@@ -143,6 +143,11 @@ public class EmailFinder {
 				i--;
 			}
 		}
+		//I wrote out a lovely explaination of a thing and sample code and made a method
+		//and github deleted it because you had modified the document while I was typing it
+		
+		//I have mapped out a way to instead of Deleting an underscored'ed email, actually fixing it.
+		
 		//Remove cases with the underscore in the ending
 		for(int k = 0; k < emails.size(); k++){
 			System.out.println("looking for infinite loop");
