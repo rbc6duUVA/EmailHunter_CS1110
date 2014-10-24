@@ -14,7 +14,6 @@ import java.util.Scanner;
 
 public class EmailFinder {
 
-
 	public static void main(String[] args) throws Exception {
 		Scanner scan = new Scanner(System.in);
 		
@@ -38,6 +37,11 @@ public class EmailFinder {
 		
 		whole = cleanFor( whole,  "(dot)",  ".");
 		whole = cleanFor( whole,  "(at)",  "@");
+		whole = cleanFor( whole,  " .",  ".");
+		whole = cleanFor( whole,  ". ",  "@");
+		whole = cleanFor( whole,  " @",  ".");
+		whole = cleanFor( whole,  "@ ",  "@");
+		
 		whole = cleanFor( whole,  " dot ",  ".");
 		whole = cleanFor( whole,  " at ",  "@");
 		
@@ -85,11 +89,17 @@ public class EmailFinder {
 		for (int i = 0; i < emails.size(); i++) {
 			int size = emails.get(i).length();
 			boolean delete = false;
-			String end = "22";
+			String end = "23";
 			
 			int f = emails.get(i).indexOf('@');
 			//must ensure that end is not lengthless
-			if(!(f+1 > size)) {end = emails.get(i).substring(f + 1, size);}
+			if(!(f+1 > size)) {
+				end = emails.get(i).substring(f + 1, size);
+			}
+			
+			//High fidelity email repair
+			emails = repairEmail(emails, i, end);
+			end = emails.get(i).substring(f + 1, size);
 			
 			//remove if @------ doesn't have a "."
 			if(!(end.contains("."))) {
@@ -102,12 +112,21 @@ public class EmailFinder {
 				while(end.contains(".")) {
 					f = emails.get(i).indexOf('.', f + 1);
 					end = emails.get(i).substring(f + 1, size);
+					//Low fidelity email repair, with end redefinition.
+					emails = repairEmail(emails, i, end);
+					end = emails.get(i).substring(f + 1, size);
 				}
 			}
 			
-			//extra credit:
-			if(end.equalsIgnoreCase("_du")) { end = "edu";}
-				
+			//make sure f is valid
+			if(f != -1) {
+				//Shift the end to be the VERY LAST things after a "."
+				while(end.contains(".")) {
+					f = emails.get(i).indexOf('.', f + 1);
+					end = emails.get(i).substring(f + 1, size);
+				}
+			}
+
 			//Destroy is less than 2 characters long
 			if(end.length() < 2) { 
 				delete = true;
@@ -143,35 +162,8 @@ public class EmailFinder {
 				i--;
 			}
 		}
-		//I wrote out a lovely explaination of a thing and sample code and made a method
-		//and github deleted it because you had modified the document while I was typing it
-		
-		//I have mapped out a way, instead of Deleting an underscored'ed email, to actually fix it.
-		//I will add it later today--it would replace this For loop I belive.
-		
-		//Remove cases with the underscore in the ending
-		for(int k = 0; k < emails.size(); k++){
-			int index = emails.get(k).indexOf('@');
-			String temp = emails.get(k).substring(index + 1, emails.get(k).length());
-			int hold = 0;
-			String hold2 = "";
-			while(temp.contains(".")){
-				hold = temp.indexOf('.');
-				temp = temp.replace("" + temp.charAt(hold), "");
-			}
-			hold2 = temp.substring(hold, temp.length());
-			for(int q = 0; q < hold2.length(); q++){
-				if(!(Character.isLetter(hold2.charAt(q)))){
-					emails.remove(k);
-					k--;
-					continue;
-			
-				}
-			}
-			
-		}
 
-		for(int i = 0; i < emails.size(); i++) { System.out.println("Found: <" + emails.get(i) + ">"); }
+		for(int i = 0; i < emails.size(); i++) { System.out.println("Found: " + emails.get(i)); }
 
 }
 	
@@ -180,6 +172,52 @@ public class EmailFinder {
 			subject = subject.replace(err,repl);
 		}
 		return subject;
+	}
+	
+	public static ArrayList<String> repairEmail(ArrayList<String> als, int index, String dmgString) {
+		String repl = "";
+		
+		if(dmgString.contains(" ")) dmgString = cleanFor(dmgString," ","");
+		
+		//High Fidelity
+		//Run after END is defined, but before refined
+		if(dmgString.equalsIgnoreCase("_irginia.edu")) repl = "v";
+		if(dmgString.equalsIgnoreCase("v_rg_n_a.edu")) repl = "i";
+		if(dmgString.equalsIgnoreCase("vi_ginia.edu")) repl = "r";
+		if(dmgString.equalsIgnoreCase("vir_inia.edu")) repl = "g";
+		if(dmgString.equalsIgnoreCase("virgi_ia.edu")) repl = "n";
+		if(dmgString.equalsIgnoreCase("virgini_.edu")) repl = "a";
+		if(dmgString.equalsIgnoreCase("virginia._du")) repl = "e";
+		if(dmgString.equalsIgnoreCase("virginia.e_u")) repl = "d";
+		if(dmgString.equalsIgnoreCase("virginia.ed_")) repl = "u";
+		
+		if(dmgString.equalsIgnoreCase("_mail.com")) repl = "g";
+		if(dmgString.equalsIgnoreCase("g_ail.co_")) repl = "m";
+		if(dmgString.equalsIgnoreCase("gm_il.com")) repl = "a";
+		if(dmgString.equalsIgnoreCase("gma_l.com")) repl = "i";
+		if(dmgString.equalsIgnoreCase("gmai_.com")) repl = "l";
+		if(dmgString.equalsIgnoreCase("gmail._om")) repl = "c";
+		if(dmgString.equalsIgnoreCase("gmail.c_m")) repl = "o";
+		
+		//Low Fidelity
+		//Run after END is refined
+		if(dmgString.equalsIgnoreCase("_du")) repl = "e";
+		if(dmgString.equalsIgnoreCase("e_u")) repl = "d";
+		if(dmgString.equalsIgnoreCase("ed_")) repl = "u";
+		
+		if(dmgString.equalsIgnoreCase("_om")) repl = "c";
+		if(dmgString.equalsIgnoreCase("c_m")) repl = "o";
+		if(dmgString.equalsIgnoreCase("co_")) repl = "m";
+		
+		//Cleans the entire email address
+		if(!(repl.isEmpty())) {
+			String temp = als.get(index);
+			temp = cleanFor(temp,"_",repl);
+			temp = cleanFor(temp," ","");
+			als.set(index, temp);
+		}
+		
+		return als;
 	}
 	
 	public static ArrayList<String> removeHTML(ArrayList<String> s){
