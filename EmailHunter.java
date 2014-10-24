@@ -1,10 +1,6 @@
 // Ben Greenawald (bhg5yd) and Ben Canty (rbc6du)
 
-//	I cleaned up a lot of the stuff and reodered things (I like main going before its methods)
-//	This now works for all the simple and normal emails on the page (and one of the bonous--almost)
-//	I'd reccomend just copying all of this into Eclypse, because I changed a lot of things.
-//	Sorry about that.
-
+//	Works for everything but ALL of the bonus (works for one of the bonuses!)
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -215,6 +211,32 @@ public class EmailFinder {
 		if(dmgString.equalsIgnoreCase("comcast._et")) repl = "n";
 		if(dmgString.equalsIgnoreCase("comcast.n_t")) repl = "e";
 		
+		if(dmgString.equalsIgnoreCase("_ellsouth.net")) repl = "b";
+		if(dmgString.equalsIgnoreCase("b_llsouth.net")) repl = "e";
+		if(dmgString.equalsIgnoreCase("be__south.net")) repl = "l";
+		if(dmgString.equalsIgnoreCase("bell_outh.net")) repl = "s";
+		if(dmgString.equalsIgnoreCase("bells_uth.net")) repl = "o";
+		if(dmgString.equalsIgnoreCase("bellso_th.net")) repl = "u";
+		if(dmgString.equalsIgnoreCase("bellsou_h.ne_")) repl = "t";
+		if(dmgString.equalsIgnoreCase("bellsout_.net")) repl = "h";
+		if(dmgString.equalsIgnoreCase("bellsouth._et")) repl = "n";
+		if(dmgString.equalsIgnoreCase("bellsouth.n_t")) repl = "e";
+		
+		if(dmgString.equalsIgnoreCase("_ol.com")) repl = "a";
+		if(dmgString.equalsIgnoreCase("a_l.c_m")) repl = "o";
+		if(dmgString.equalsIgnoreCase("ao_.com")) repl = "l";
+		if(dmgString.equalsIgnoreCase("aol._om")) repl = "c";
+		if(dmgString.equalsIgnoreCase("aol.co_")) repl = "m";
+		
+		if(dmgString.equalsIgnoreCase("_otmail.com")) repl = "h";
+		if(dmgString.equalsIgnoreCase("h_tmail.c_m")) repl = "o";
+		if(dmgString.equalsIgnoreCase("ho_mail.com")) repl = "t";
+		if(dmgString.equalsIgnoreCase("hot_ail.co_")) repl = "m";
+		if(dmgString.equalsIgnoreCase("hotm_il.com")) repl = "a";
+		if(dmgString.equalsIgnoreCase("hotma_l.com")) repl = "i";
+		if(dmgString.equalsIgnoreCase("hotmai_.com")) repl = "l";
+		if(dmgString.equalsIgnoreCase("hotmail._om")) repl = "c";
+		
 		//Low Fidelity
 		//Run after END is refined
 		if(dmgString.equalsIgnoreCase("_du")) repl = "e";
@@ -224,6 +246,10 @@ public class EmailFinder {
 		if(dmgString.equalsIgnoreCase("_om")) repl = "c";
 		if(dmgString.equalsIgnoreCase("c_m")) repl = "o";
 		if(dmgString.equalsIgnoreCase("co_")) repl = "m";
+		
+		if(dmgString.equalsIgnoreCase("_et")) repl = "n";
+		if(dmgString.equalsIgnoreCase("n_t")) repl = "e";
+		if(dmgString.equalsIgnoreCase("ne_")) repl = "t";
 		
 		//Cleans the entire email address
 		if(!(repl.isEmpty())) {
