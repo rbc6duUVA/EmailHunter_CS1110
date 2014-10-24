@@ -143,15 +143,21 @@ public class EmailFinder {
 				i--;
 			}
 		}
-		//Remove cases with the underscore in the ending THIS DOES NOT WORK PERFECTLY YET
 		//Remove cases with the underscore in the ending
 		for(int k = 0; k < emails.size(); k++){
+			System.out.println("looking for infinite loop");
 			int index = emails.get(k).indexOf('@');
 			String temp = emails.get(k).substring(index + 1, emails.get(k).length());
-			temp = cleanFor(temp, ".", "");
-			
-			for(int q = 0; q < temp.length(); q++){
-				if(!(Character.isLetter(temp.charAt(q)))){
+			int hold = 0;
+			String hold2 = "";
+			while(temp.contains(".")){
+				hold = temp.indexOf('.');
+				temp = temp.replace("" + temp.charAt(hold), "");
+			}
+			hold2 = temp.substring(hold, temp.length());
+			for(int q = 0; q < hold2.length(); q++){
+				System.out.println("looking for infinite loop2");
+				if(!(Character.isLetter(hold2.charAt(q)))){
 					emails.remove(k);
 					k--;
 					continue;
