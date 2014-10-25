@@ -1,7 +1,5 @@
 // Ben Greenawald (bhg5yd) and Ben Canty (rbc6du)
 
-//	Works for everything but ALL of the bonus (works for one of the bonuses!)
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,6 +10,7 @@ public class EmailFinder {
 
 	public static void main(String[] args) throws Exception {
 		Scanner scan = new Scanner(System.in);
+		ArrayList<String> emails = new ArrayList<String>();
 		
 		//Gets URL from the user
 		System.out.print("What web page should we search for email addresses? ");
@@ -29,7 +28,8 @@ public class EmailFinder {
 			whole += addendum + " ";
 		}
 		
-		ArrayList<String> emails = new ArrayList<String>();
+		//Makes the String easy to read for emails, and easy to make corrections
+		whole = whole.toLowerCase();
 		
 		whole = cleanFor( whole,  "(dot)",  ".");
 		whole = cleanFor( whole,  "(at)",  "@");
@@ -44,9 +44,6 @@ public class EmailFinder {
 		whole = cleanFor( whole,  ". edu",  ".edu");
 		whole = cleanFor( whole,  ". com",  ".com");
 		whole = cleanFor( whole,  ". net",  ".net");
-		whole = cleanFor( whole,  ". Edu",  ".edu");
-		whole = cleanFor( whole,  ". Com",  ".com");
-		whole = cleanFor( whole,  ". Net",  ".net");
 		
 		//More robust method for getting emails in the standard form
 		for(int i = 0; i < whole.length(); i++){
@@ -81,14 +78,13 @@ public class EmailFinder {
 			/*A2Shrt*/if (c != -1) {
 				end = emails.get(i).substring(c, size);
 				if(end.length() < 2) {	
-					System.out.println("Error_2Shrt: " + emails.get(i).toString());
 					emails.remove(i);
 				}
 			}
 			
 		}
 		
-		// Removes cases with not a valid .whatever
+		// Removes invalid emails (attempts a repair first
 		for (int i = 0; i < emails.size(); i++) {
 			int size = emails.get(i).length();
 			boolean delete = false;
@@ -294,7 +290,7 @@ public class EmailFinder {
 		str = cleanFor(str, "\">",		 " ");
 		str = cleanFor(str, "href=",	 " ");
 		str = cleanFor(str, "\"",		 " ");
-		str = cleanFor(str, "NOSPAM",	  "");
+		str = cleanFor(str, "nospam",	  "");
 		
 		//Takes every element of the new String (which was the original ArrayList concatenated with 
 		//spaces between each element.  Thus this makes a String array and ArrayList out of the String
