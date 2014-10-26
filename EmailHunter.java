@@ -45,6 +45,12 @@ public class EmailFinder {
 		whole = cleanFor( whole,  ". com",  ".com");
 		whole = cleanFor( whole,  ". net",  ".net");
 		
+		//Will convert alternate character forms into readable characters.
+		whole = cleanCharHTML(whole);
+		
+		//Used for formatting issue specific to "cleanCharHTML" but may also apply to other emails introduced "send and email to me:email@address.com"
+		whole = cleanFor( whole,  ":",  " ");
+		
 		//More robust method for getting emails in the standard form
 		for(int i = 0; i < whole.length(); i++){
 			if(whole.charAt(i) == '@')
@@ -320,6 +326,35 @@ public class EmailFinder {
 			if(test.endsWith(",")) temp.set(i, test.substring(0 , test.length()-1) );
 		}
 			
+		return temp;
+	}
+	
+		public static String cleanCharHTML (String s) {
+		String temp = s;
+		
+		//Converts all "&#xhhhh;" to "&#nnnn;"
+		HTMLLoop:
+		while(temp.contains("&#")) {
+			int start = temp.indexOf("&#x");
+			int end = temp.indexOf(";", start);
+
+			if (start == -1 || end == -1) {
+				break HTMLLoop;
+			}
+			
+			temp = cleanFor(
+					temp,
+					"&#x" + temp.substring(start+3, end) + ";",
+					"&#" + Integer.parseInt(temp.substring(start+3, end), 16) + ";"
+			);
+		}
+		
+		//Converts all "&#nnnn;" to "character"
+		for(int num=32; num <= 126; num++) {
+			temp = cleanFor(temp, "&#"+num+";", "" + (char)num);
+		}
+		
+		//Return the cleaned string
 		return temp;
 	}
 
