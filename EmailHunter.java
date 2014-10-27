@@ -4,7 +4,37 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// TEST ON:   http://cs1110.cs.virginia.edu/emails.html
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// EmailFinder.java																												//
+// 																																//
+// CS 1110 Project: EmailFinder																									//
+// Authors: Ben Canty and Ben Greenawald																						//
+// Date Started: 	Friday,17 October 2014																						//
+// Date Completed: 	Monday, 27 October 2014																						//
+// Date Due: 		Wednesday, 29 October 2014																					//
+// 																																//
+// Design a program that will receive a URL and mine it for email addresses.													//
+// It should work for any type of email (ideally)																				//
+// 																																//
+// This design works for any "String1"@"String2"."String3"																		//
+// Where:																														//
+// 		String1 is anything																										//
+// 		String2 is anything																										//
+// 		String3 is >=2 characters long and contains no numbers																	//
+// 																																//
+// This design works for emails displayed in plain text, &#nnnn, &#xhhhh, and reversed text formats (Low Fidelity).				//
+// This design attempts to repair emails that have undergone "_" substitutions.													//
+// This design also tries to correct for anti-email-mining methods:																//
+//  	Awkward spacing																											//
+//  	Character substitutions ( "at" for "@" , " (dot) " for "." )															//
+//  	Null insertions (myemail@virgiNOSPAMnia.edu)																			//
+//  																															//
+//  Tests indicate that this program is running well.																			//
+//  Tests run on url: http://cs1110.cs.virginia.edu/emails.html																	//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 public class EmailFinder {
 
@@ -23,18 +53,18 @@ public class EmailFinder {
 		while(scan1.hasNext()) {
 			String addendum = scan1.next();
 			//Cleans out line breaks with spaces
-			if (addendum.equals("\n")) addendum = " ";
-			
+			if (addendum.equals("\n")) {addendum = " ";}
 			whole += addendum + " ";
 		}
 		
+//////////Conditions "whole" for easier reading///////////////////////////////////////////////////////////////////////////////////
 		//Makes the String easy to read for emails, and easy to make corrections
 		whole = whole.toLowerCase();
 		
 		whole = cleanFor( whole,  "(dot)",  ".");
 		whole = cleanFor( whole,  "(at)",  "@");
 		whole = cleanFor( whole,  " .",  ".");
-		whole = cleanFor( whole,  ". ",  ".");
+		//whole = cleanFor( whole,  ". ",  ".");  Causes error with emails at the end of sentences.
 		whole = cleanFor( whole,  " @",  "@");
 		whole = cleanFor( whole,  "@ ",  "@");
 		
@@ -48,9 +78,11 @@ public class EmailFinder {
 		//Will convert alternate character forms into readable characters.
 		whole = cleanCharHTML(whole);
 		
-		//Used for formatting issue specific to "cleanCharHTML" but may also apply to other emails introduced "send and email to me:email@address.com"
+		//Used for formatting issue specific to "cleanCharHTML"
+		//but may also apply to other emails introduced "send and email to me:email@address.com"
 		whole = cleanFor( whole,  ":",  " ");
 		
+//////////Creates and ArrayList<String> of all potential emails///////////////////////////////////////////////////////////////////
 		//More robust method for getting emails in the standard form
 		for(int i = 0; i < whole.length(); i++){
 			if(whole.charAt(i) == '@')
@@ -58,12 +90,14 @@ public class EmailFinder {
 				int start = whole.lastIndexOf(' ', i);
 				int finish = whole.indexOf(' ', i);
 				
+				//Removes the period if it is punctuation
 				if(whole.charAt(finish - 1) == '.') {
-					//Removes the period if it is punctuation
 					while(!(emails.contains(whole.substring(start, finish - 1)))) {
 						emails.add(whole.substring(start, finish - 1));
 					}
-				} else { 	//Leaves it otherwise
+				} 
+				//Leaves it otherwise
+				else {
 					while(!(emails.contains(whole.substring(start, finish)))) {
 						emails.add(whole.substring(start, finish));
 					}
@@ -71,8 +105,11 @@ public class EmailFinder {
 			}
 		}
 
+//////////Append hidden potentail emails//////////////////////////////////////////////////////////////////////////////////////////
 		//removes elements of HTML formatting
 		emails = EmailFinder.removeHTML(emails);
+		//Provides for the possibility of reversed emails. (moc.liamg@neb)
+		emails = reverse(emails);
 		
 		//Removes invalid addresses that contain @ but are not emails addresses
 		for(int i = 0; i < emails.size(); i++){
@@ -81,7 +118,7 @@ public class EmailFinder {
 			
 			String end = null;
 			
-			/*A2Shrt*/if (c != -1) {
+			if (c != -1) {
 				end = emails.get(i).substring(c, size);
 				if(end.length() < 2) {	
 					emails.remove(i);
@@ -90,6 +127,7 @@ public class EmailFinder {
 			
 		}
 		
+//////////Tests for validity and Retains only valid email addresses///////////////////////////////////////////////////////////////
 		// Removes invalid emails (attempts a repair first
 		for (int i = 0; i < emails.size(); i++) {
 			int size = emails.get(i).length();
@@ -168,10 +206,22 @@ public class EmailFinder {
 			}
 		}
 
+//////////Prints out all mined emails from webpage////////////////////////////////////////////////////////////////////////////////
 		for(int i = 0; i < emails.size(); i++) { System.out.println("Found: <" + emails.get(i) + ">"); }
+		scan.close();
+		scan1.close();
+	}
 
-}
-	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////  Methods Used in Program  ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/**Takes a String and finds "err" and replaces it with "repl" for every instance.
+	 * @param subject
+	 * @param err
+	 * @param repl
+	 * @return cleaned version of the String.
+	 */
 	public static String cleanFor(String subject, String err, String repl){
 		while(subject.contains(err)){
 			subject = subject.replace(err,repl);
@@ -179,6 +229,14 @@ public class EmailFinder {
 		return subject;
 	}
 	
+	
+	
+	/**Attempts to repair emails that have every instance of a letter substituted by an underscore.
+	 * @param als
+	 * @param index
+	 * @param dmgString
+	 * @return an ArrayList<String> with all repaired elements.
+	 */
 	public static ArrayList<String> repairEmail(ArrayList<String> als, int index, String dmgString) {
 		String repl = "";
 		
@@ -271,6 +329,13 @@ public class EmailFinder {
 		return als;
 	}
 	
+	
+	
+	/**Removes remnants of HTML formatting (except for alternate character systems)
+	 * ie. <a> <strong> </head>
+	 * @param s
+	 * @return an ArrayList<String> with all cleaned elements.
+	 */
 	public static ArrayList<String> removeHTML(ArrayList<String> s){
 		String str = " ";
 		
@@ -279,7 +344,6 @@ public class EmailFinder {
 			String temp = s.get(i);
 			str += temp + " ";
 		}
-		//
 		
 		//CLEAN THE STRING
 		str = cleanFor(str, "</a>",		 " ");
@@ -329,7 +393,13 @@ public class EmailFinder {
 		return temp;
 	}
 	
-		public static String cleanCharHTML (String s) {
+	
+	
+	/**Converts <#&nnnn> and <#&hhhh> to readable characters (in string format).
+	 * @param s
+	 * @return a string
+	 */
+	public static String cleanCharHTML (String s) {
 		String temp = s;
 		
 		//Converts all "&#xhhhh;" to "&#nnnn;"
@@ -357,8 +427,16 @@ public class EmailFinder {
 		//Return the cleaned string
 		return temp;
 	}
+
+	
+	
+	/**Appends to the ArrayList a new set of strings that are potentially reversed emails.
+	 * This must be done after the ArrayList is constructed and defined but before it is filtered.
+	 * @param e
+	 * @return ArrayList with additional elements
+	 */
 	public static ArrayList<String> reverse(ArrayList<String> e){
-		/**
+		/*
 		 *This is a reverse method, it should take in the arraylist of strings, which at this point should still
 		 *contain the reversed strings, identify and potential candidates, and reverse the string. To identify basic candidates, 
 		 *it should find any string that has an @ sign (all of them should have at signs at this point) and a period before the at sign but not after (this guarantees
@@ -382,9 +460,10 @@ public class EmailFinder {
 				}
 				e.add(reverse);
 			}
-			
 		}
 		
 		return e;
-}
+	}
+	
+//FIN
 }
