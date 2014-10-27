@@ -357,5 +357,34 @@ public class EmailFinder {
 		//Return the cleaned string
 		return temp;
 	}
-
+	public static ArrayList<String> reverse(ArrayList<String> e){
+		/**
+		 *This is a reverse method, it should take in the arraylist of strings, which at this point should still
+		 *contain the reversed strings, identify and potential candidates, and reverse the string. To identify basic candidates, 
+		 *it should find any string that has an @ sign (all of them should have at signs at this point) and a period before the at sign but not after (this guarantees
+		 *that no valid emails are changed, but it does make it possible to miss a few reverse ones). It then takes the strings. and using a temp string and a for loop,
+		 *reverses the strings before adding them to the arraylist (no need to remove the old ones becomes later trials should remove them. Then these candidates will
+		 *be subject to the later trials and should they pass, they are potentially valid emails.
+		 */
+		for(int i = 0; i < e.size(); i++){
+			String temp = e.get(i);
+			int at = temp.indexOf('@');
+			//Creates a before at substring and an after at substring
+			//Run tests on both of these substrings to check for potential reverse emails
+			//If the end doesn't have a period but the start does, it is a good candidate for a reverse email
+			//If both have a period, we are unsure, but we do not want to risk reversing an email that is in the correct order
+			String start = temp.substring(0);
+			String end = temp.substring(at + 1);
+			if(start.contains(".") && !(end.contains("."))){
+				String reverse = "";
+				for(int j = e.get(i).length() - 1; j >= 0; j--){
+					reverse += e.get(i).charAt(j);
+				}
+				e.add(reverse);
+			}
+			
+		}
+		
+		return e;
+}
 }
