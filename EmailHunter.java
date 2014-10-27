@@ -58,6 +58,10 @@ public class EmailFinder {
 		}
 		
 //////////Conditions "whole" for easier reading///////////////////////////////////////////////////////////////////////////////////
+		
+		//if a sentence begins with Edu, we are not to accidentally count it.
+		whole = cleanFor( whole,  ". Edu",  ".  3du");
+		
 		//Makes the String easy to read for emails, and easy to make corrections
 		whole = whole.toLowerCase();
 		
